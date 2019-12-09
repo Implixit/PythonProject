@@ -2,10 +2,11 @@ import random
 
 filePath ="idiom.txt"
 AutoChoice=""
-#阅读文件而且找那文件
+GameOver = False
+#read the txt file
 def readFile(x):
     
-    #打开文件
+    #open the text file
     with open(filePath,"r") as fp:
         #read line 
         for i in set(fp.readlines()):
@@ -34,20 +35,42 @@ def CreateIdiom():
         AutoChoice = random.choice(f.readlines()) [:-1] #remove the \n  \n Automatic generated
         print(AutoChoice)
         return AutoChoice
-def mian():
-    AutoChoice = CreateIdiom()
-    answers  = input("请输入成语:")
-    if Validation(AutoChoice,answers):
-        print("正确")
-    # unable to find in the file
-    if readFile(answers)== False:
-        print("成语不存在")
-        return 0
-    # able to find in the file 
-    if readFile(answers)== True:
-        print("成语存在")
-        return 0 
 
+def PlayWithAI():
+    GameOver =False
+    #Keep running until game over is true
+    while (GameOver==False):
+        AutoChoice = CreateIdiom()
+        answers  = input("请输入成语:")
+    
+        # unable to find in the file
+        if readFile(answers)== False:
+            print("成语不存在")
+            GameOver = True
+        # able to find in the file 
+        if readFile(answers)== True:
+            print("成语存在")
+            
+        if Validation(AutoChoice,answers):
+            print("正确")
+        else:
+            print("你输了！")
+            GameOver = True
+def FindIdiom():
+    text = input("请输入一个字来找相同的第一个成语字\n")
+        #open file
+    with open(filePath,"r") as fp:
+        #read line 
+        for i in set(fp.readlines()):
+            #if input is same as the idiom first word print that idiom
+            if text ==i.strip()[0]:
+                print(i.strip())
+def main():
+    question = input("成语接龙:y 查询成语:x\n")
+    if question =="y":
+        PlayWithAI()
+    if question =='x':
+        FindIdiom()
 #Run the program
-mian()
+main()
 
